@@ -13,7 +13,7 @@ The current version of the code has been tested with:
 
 ## Running the experiments
 Individual experiments can be run with `main.py`. Main options are:
-- `--experiment`: which task protocol? (`splitMNIST`|`permMNIST`)
+- `--experiment`: which task protocol? (`splitMNIST`|`permMNIST`,`CIFAR10`)
 - `--scenario`: according to which scenario? (`task`|`domain`|`class`)
 - `--tasks`: how many tasks?
 
