@@ -1,4 +1,4 @@
-# Continual Learning
+# Continual Learning with CIFAR10
 This is a PyTorch implementation of the continual learning experiments described in the following papers:
 * Three scenarios for continual learning ([link](https://arxiv.org/abs/1904.07734))
 * Generative replay with feedback connections as a general strategy 
