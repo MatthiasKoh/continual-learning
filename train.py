@@ -43,7 +43,7 @@ def train_cl(model, train_datasets, replay_mode="none", scenario="class",classes
                 n = n.replace('.', '__')
                 model.register_buffer('{}_SI_prev_task'.format(n), p.data.clone())
 
-    # Loop over all tasks.
+    # Loop over all tasks. {TRAINING REALLY BEGINS, for each of the task's train_dataset}
     for task, train_dataset in enumerate(train_datasets, 1):
 
         # If offline replay-setting, create large database of all tasks so far
@@ -283,6 +283,10 @@ def train_cl(model, train_datasets, replay_mode="none", scenario="class",classes
         progress.close()
         if generator is not None:
             progress_gen.close()
+            
+            #-----> WE WANT TO TEST AFTER EACH TASK training ###################{{{{{{{{{
+            
+            
 
         # EWC: estimate Fisher Information matrix (FIM) and update term for quadratic penalty
         if isinstance(model, ContinualLearner) and (model.ewc_lambda>0):
