@@ -419,7 +419,7 @@ def run(args, verbose=False):
     #-------------------------------------------------------------------------------------------------#
 
     #--------------------#
-    #----- TRAINING -----#
+    #----- TRAINING -----# !! EDITTED to TEST 
     #--------------------#
 
     if verbose:
@@ -428,7 +428,7 @@ def run(args, verbose=False):
     start = time.time()
     # Train model
     train_cl(
-        model, train_datasets, replay_mode=args.replay, scenario=scenario, classes_per_task=classes_per_task,
+        model, train_datasets,test_datasets, replay_mode=args.replay, scenario=scenario, classes_per_task=classes_per_task,
         iters=args.iters, batch_size=args.batch,
         generator=generator, gen_iters=args.g_iters, gen_loss_cbs=generator_loss_cbs,
         sample_cbs=sample_cbs, eval_cbs=eval_cbs, loss_cbs=generator_loss_cbs if args.feedback else solver_loss_cbs,
