@@ -9,8 +9,8 @@ from data import SubDataset, ExemplarDataset
 from continual_learner import ContinualLearner
 
 
-
-def train_cl(model, train_datasets, replay_mode="none", scenario="class",classes_per_task=None,iters=2000,batch_size=32,
+#added Test_datasets for Evaluation
+def train_cl(model, train_datasets,test_datasets, replay_mode="none", scenario="class",classes_per_task=None,iters=2000,batch_size=32,
              generator=None, gen_iters=0, gen_loss_cbs=list(), loss_cbs=list(), eval_cbs=list(), sample_cbs=list(),
              use_exemplars=True, add_exemplars=False, metric_cbs=list()):
     '''Train a model (with a "train_a_batch" method) on multiple tasks, with replay-strategy specified by [replay_mode].
@@ -285,6 +285,16 @@ def train_cl(model, train_datasets, replay_mode="none", scenario="class",classes
             progress_gen.close()
             
             #-----> WE WANT TO TEST AFTER EACH TASK training ###################{{{{{{{{{
+        print("\n\n TASK EVALUATION RESULTS:")
+        precs = [evaluate.validate(model, test_datasets[task], verbose=False, test_size=None, task=i+1, with_exemplars=False,
+        allowed_classes=list(range(classes_per_task*i, classes_per_task*(i+1))) if scenario=="task" else None) for i in range(args.tasks)]
+        average_precs = sum(precs) / args.tasks
+        # -print on screen
+        print("\n Precision on test-set{}:".format(" (softmax classification)" if args.use_exemplars else ""))
+        for i in range(args.tasks):
+            print(" - Task {}: {:.4f}".format(i + 1, precs[i]))
+        print('=> Average precision over all {} tasks: {:.4f}\n'.format(args.tasks, average_precs))
+
             
             
 
