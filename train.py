@@ -292,7 +292,9 @@ def train_cl(model, train_datasets,test_datasets, replay_mode="none", scenario="
         print(task)
         print(test_datasets[0])
         print(test_datasets[1])
-        current_test_datasets = test_datasets[0]+test_datasets[1]
+        current_test_datasets = test_datasets[0]
+        for i in range(1,task):
+          current_test_datasets+= test_datasets[i]
         precs_task = evaluate.validate(model, current_test_datasets, verbose=False, test_size=None, with_exemplars=False)
         print(" - Task {}: {:.4f}".format(task , precs_task))
         
@@ -316,6 +318,9 @@ def train_cl(model, train_datasets,test_datasets, replay_mode="none", scenario="
         print("\n\n Exemplars Combination of testsets EVALUATION RESULTS:")
         if use_exemplars:
           ecurrent_test_datasets = sum(test_datasets[:task])
+          ecurrent_test_datasets = test_datasets[0]
+          for i in range(1,task):
+            ecurrent_test_datasets+= test_datasets[i]
           precs_e_task = evaluate.validate(
             model, ecurrent_test_datasets, verbose=False, test_size=None, task=task+1, with_exemplars=True,
             allowed_classes=list(range(classes_per_task*task, classes_per_task*(task+1))) if scenario=="task" else None)
