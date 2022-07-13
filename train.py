@@ -288,6 +288,7 @@ def train_cl(model, train_datasets,test_datasets, replay_mode="none", scenario="
         print("\n\n TASK EVALUATION RESULTS:")
         print("\n\n Combination of testsets EVALUATION RESULTS:")
             # to get cumulative task accuracy 
+        print(test_datasets[:task])
         current_test_datasets = sum(test_datasets[:task])
         precs_task = evaluate.validate(model, current_test_datasets, verbose=False, test_size=None, with_exemplars=False)
         print(" - Task {}: {:.4f}".format(task + 1, precs_task))
