@@ -317,7 +317,6 @@ def train_cl(model, train_datasets,test_datasets, replay_mode="none", scenario="
              # -with exemplars
         print("\n\n Exemplars Combination of testsets EVALUATION RESULTS:")
         if use_exemplars:
-          ecurrent_test_datasets = sum(test_datasets[:task])
           ecurrent_test_datasets = test_datasets[0]
           for i in range(1,task):
             ecurrent_test_datasets+= test_datasets[i]
