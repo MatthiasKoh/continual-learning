@@ -284,16 +284,29 @@ def train_cl(model, train_datasets,test_datasets, replay_mode="none", scenario="
         if generator is not None:
             progress_gen.close()
             
-            #-----> WE WANT TO TEST AFTER EACH TASK training ###################{{{{{{{{{
+            #-----> WE WANT TO TEST AFTER EACH TASK training ###################{{{{{{{{{ !!!#MAY NEED to bring in a list from main.py
         print("\n\n TASK EVALUATION RESULTS:")
-        precs = [evaluate.validate(model, test_datasets[task], verbose=False, test_size=None, task=i+1, with_exemplars=False,
+        print("\n\n Combination of testsets EVALUATION RESULTS:")
+            # to get cumulative task accuracy 
+        current_test_datasets = sum(test_datasets[:task])
+        precs_task = evaluate.validate(model, current_test_datasets, verbose=False, test_size=None, with_exemplars=False)
+        print(" - Task {}: {:.4f}".format(task + 1, precs_task))
+        
+        print("\n\n 1st task EVALUATION RESULTS:")
+         # to get 1st task accuracy {can extend to for each task)
+        precs_1_task = evaluate.validate(model, test_datasets[1], verbose=False, test_size=None, with_exemplars=False)
+        print(" - Task {}: {:.4f}".format(task + 1, precs_task))
+        
+        #reference 
+       """ precs = [evaluate.validate(model, test_datasets[task], verbose=False, test_size=None, task=i+1, with_exemplars=False,
         allowed_classes=list(range(classes_per_task*i, classes_per_task*(i+1))) if scenario=="task" else None) for i in range(args.tasks)]
-        average_precs = sum(precs) / args.tasks
+        #!!!!WHAT IS CLASSES PER TASK FOR?
+        average_precs = sum(precs) / args.tasks.  #args.task is just total num of tasks
         # -print on screen
         print("\n Precision on test-set{}:".format(" (softmax classification)" if args.use_exemplars else ""))
         for i in range(args.tasks):
             print(" - Task {}: {:.4f}".format(i + 1, precs[i]))
-        print('=> Average precision over all {} tasks: {:.4f}\n'.format(args.tasks, average_precs))
+        print('=> Average precision over all {} tasks: {:.4f}\n'.format(args.tasks, average_precs))"""
 
             
             
