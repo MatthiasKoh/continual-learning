@@ -7,6 +7,7 @@ import copy
 import utils
 from data import SubDataset, ExemplarDataset
 from continual_learner import ContinualLearner
+import evaluate
 
 
 #added Test_datasets for Evaluation
