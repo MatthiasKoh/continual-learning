@@ -311,38 +311,7 @@ def train_cl(model, train_datasets,test_datasets, replay_mode="none", scenario="
        #     print(" - Task {}: {:.4f}".format(i + 1, precs[i]))
        # print('=> Average precision over all {} tasks: {:.4f}\n'.format(args.tasks, average_precs))
       
-             # -with exemplars
-        
-        if use_exemplars:
-          print("\n\n Exemplars Combination of testsets EVALUATION RESULTS:")
-          ecurrent_test_datasets = test_datasets[0]
-          for i in range(1,task):
-            ecurrent_test_datasets+= test_datasets[i]
-          precs_e_task = evaluate.validate(
-            model, ecurrent_test_datasets, verbose=False, test_size=None, task=task, with_exemplars=True)
-          print(" - Task {}: {:.4f}".format(task , precs_e_task))
-      
-          print("\n\n Exemplars 1st task EVALUATION RESULTS:")
-          precs_e1_task = evaluate.validate( model, test_datasets[0], verbose=False, test_size=None, task=task, with_exemplars=True)
-          print(" - Task {}: {:.4f}".format(task, precs_e1_task))
-      
-      
-      #reference
-      # -with exemplars
-   #if args.use_exemplars:
-     #   precs = [evaluate.validate(
-      #      model, test_datasets[i], verbose=False, test_size=None, task=i+1, with_exemplars=True,
-      #      allowed_classes=list(range(classes_per_task*i, classes_per_task*(i+1))) if scenario=="task" else None
-      #  ) for i in range(args.tasks)]
-      #  average_precs_ex = sum(precs) / args.tasks
-     #   # -print on screen
-      #  if verbose:
-     #       print(" Precision on test-set (classification using exemplars):")
-      ##      for i in range(args.tasks):
-      #          print(" - Task {}: {:.4f}".format(i + 1, precs[i]))
-      #      print('=> Average precision over all {} tasks: {:.4f}\n'.format(args.tasks, average_precs_ex))
-
-
+            
             
             
 
@@ -376,6 +345,40 @@ def train_cl(model, train_datasets,test_datasets, replay_mode="none", scenario="
                 # based on this dataset, construct new exemplar-set for this class
                 model.construct_exemplar_set(dataset=class_dataset, n=exemplars_per_class)
             model.compute_means = True
+            
+         # -with exemplars
+        
+        if use_exemplars:
+          print("\n\n Exemplars Combination of testsets EVALUATION RESULTS:")
+          ecurrent_test_datasets = test_datasets[0]
+          for i in range(1,task):
+            ecurrent_test_datasets+= test_datasets[i]
+          precs_e_task = evaluate.validate(
+            model, ecurrent_test_datasets, verbose=False, test_size=None, task=task, with_exemplars=True)
+          print(" - Task {}: {:.4f}".format(task , precs_e_task))
+      
+          print("\n\n Exemplars 1st task EVALUATION RESULTS:")
+          precs_e1_task = evaluate.validate( model, test_datasets[0], verbose=False, test_size=None, task=task, with_exemplars=True)
+          print(" - Task {}: {:.4f}".format(task, precs_e1_task))
+      
+      
+      #reference
+      # -with exemplars
+   #if args.use_exemplars:
+     #   precs = [evaluate.validate(
+      #      model, test_datasets[i], verbose=False, test_size=None, task=i+1, with_exemplars=True,
+      #      allowed_classes=list(range(classes_per_task*i, classes_per_task*(i+1))) if scenario=="task" else None
+      #  ) for i in range(args.tasks)]
+      #  average_precs_ex = sum(precs) / args.tasks
+     #   # -print on screen
+      #  if verbose:
+     #       print(" Precision on test-set (classification using exemplars):")
+      ##      for i in range(args.tasks):
+      #          print(" - Task {}: {:.4f}".format(i + 1, precs[i]))
+      #      print('=> Average precision over all {} tasks: {:.4f}\n'.format(args.tasks, average_precs_ex))
+
+    
+         
 
         # Calculate statistics required for metrics
         for metric_cb in metric_cbs:
