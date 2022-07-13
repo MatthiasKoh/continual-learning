@@ -289,15 +289,15 @@ def train_cl(model, train_datasets,test_datasets, replay_mode="none", scenario="
         print("\n\n Combination of testsets EVALUATION RESULTS:")
             # to get cumulative task accuracy 
         print(task)
-        print(test_datasets[task].dtype)
+        print(test_datasets[:task])
         current_test_datasets = sum(test_datasets[:task])
         precs_task = evaluate.validate(model, current_test_datasets, verbose=False, test_size=None, with_exemplars=False)
-        print(" - Task {}: {:.4f}".format(task + 1, precs_task))
+        print(" - Task {}: {:.4f}".format(task , precs_task))
         
         print("\n\n 1st task EVALUATION RESULTS:")
          # to get 1st task accuracy {can extend to for each task)
         precs_1_task = evaluate.validate(model, test_datasets[0], verbose=False, test_size=None, with_exemplars=False)
-        print(" - Task {}: {:.4f}".format(task + 1, precs_1_task))
+        print(" - Task {}: {:.4f}".format(task , precs_1_task))
         
         #reference 
        #precs = [evaluate.validate(model, test_datasets[task], verbose=False, test_size=None, task=i+1, with_exemplars=False,
@@ -315,15 +315,15 @@ def train_cl(model, train_datasets,test_datasets, replay_mode="none", scenario="
         if use_exemplars:
           ecurrent_test_datasets = sum(test_datasets[:task])
           precs_e_task = evaluate.validate(
-            model, ecurrent_test_datasets, verbose=False, test_size=None, task=i+1, with_exemplars=True,
+            model, ecurrent_test_datasets, verbose=False, test_size=None, task=task+1, with_exemplars=True,
             allowed_classes=list(range(classes_per_task*task, classes_per_task*(task+1))) if scenario=="task" else None)
-          print(" - Task {}: {:.4f}".format(task + 1, precs_e_task))
+          print(" - Task {}: {:.4f}".format(task , precs_e_task))
       
           print("\n\n Exemplars 1st task EVALUATION RESULTS:")
           precs_e1_task = evaluate.validate(
-            model, test_datasets[0], verbose=False, test_size=None, task=i+1, with_exemplars=True,
+            model, test_datasets[0], verbose=False, test_size=None, task=task+1, with_exemplars=True,
             allowed_classes=list(range(classes_per_task*task, classes_per_task*(task+1))) if scenario=="task" else None)
-          print(" - Task {}: {:.4f}".format(task + 1, precs_e1_task))
+          print(" - Task {}: {:.4f}".format(task, precs_e1_task))
       
       
       #reference
