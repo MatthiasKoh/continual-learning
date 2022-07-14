@@ -248,6 +248,7 @@ def get_multitask_experiment(name, scenario, tasks, data_dir="./datasets", only_
         if not only_config:
             # prepare permutation to shuffle label-ids (to create different class batches for each random seed)
             permutation = np.array(list(range(10))) if exception else np.random.permutation(list(range(10)))
+            print("Permutation", permutation)
             target_transform = transforms.Lambda(lambda y, p=permutation: int(p[y]))
             # prepare train and test datasets with all classes
             cifar10_train = get_dataset('cifar10', type="train", dir=data_dir, target_transform=target_transform,
