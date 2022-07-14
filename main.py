@@ -185,6 +185,7 @@ def run(args, verbose=False):
     torch.manual_seed(args.seed)
     if cuda:
         torch.cuda.manual_seed(args.seed)
+    print(args.seed)
 
 
     #-------------------------------------------------------------------------------------------------#
