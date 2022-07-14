@@ -185,7 +185,7 @@ def run(args, verbose=False):
     torch.manual_seed(args.seed)
     if cuda:
         torch.cuda.manual_seed(args.seed)
-    print(args.seed)
+    
 
 
     #-------------------------------------------------------------------------------------------------#
@@ -649,5 +649,25 @@ if __name__ == '__main__':
     args = parser.parse_args()
     # -set default-values for certain arguments based on chosen scenario & experiment
     args = set_default_values(args)
-    # -run experiment
-    run(args, verbose=True)
+    
+    #edit to get 10 runs with diff seeds/permuatations of class
+    for i in range(10):
+      args.seed = i 
+      # Set random seeds
+      np.random.seed(args.seed)
+      torch.manual_seed(args.seed)
+      if cuda:
+          torch.cuda.manual_seed(args.seed)
+          
+      # Prepare data for chosen experiment
+      if verbose:
+          print("\nPreparing the data...")
+      (train_datasets, test_datasets), config, classes_per_task = get_multitask_experiment(
+          name=args.experiment, scenario=scenario, tasks=args.tasks, data_dir=args.d_dir,
+          verbose=verbose, exception=True if args.seed==0 else False,)
+
+      # -run experiment
+      run(args, verbose=True)
+
+
+    
