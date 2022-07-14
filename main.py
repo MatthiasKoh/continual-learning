@@ -653,11 +653,13 @@ if __name__ == '__main__':
     #edit to get 10 runs with diff seeds/permuatations of class
     for i in range(10):
       args.seed = i 
+      print("START of NEW RUN", args.seed)
       # Set random seeds
       np.random.seed(args.seed)
       torch.manual_seed(args.seed)
       if cuda:
           torch.cuda.manual_seed(args.seed)
+      
           
       # Prepare data for chosen experiment
       if verbose:
