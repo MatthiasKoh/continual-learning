@@ -287,9 +287,9 @@ def get_multitask_experiment(name, scenario, tasks, data_dir="./datasets", only_
             print("Permutation", permutation)
             target_transform = transforms.Lambda(lambda y, p=permutation: int(p[y]))
             # prepare train and test datasets with all classes
-            animalpart_train = get_dataset('cifar10', type="train", dir=data_dir, target_transform=target_transform,
+            animalpart_train = get_dataset('animalpart', type="train", dir=data_dir, target_transform=target_transform,
                                       verbose=verbose)
-            animalpart_test = get_dataset('cifar10', type="test", dir=data_dir, target_transform=target_transform,
+            animalpart_test = get_dataset('animalpart', type="test", dir=data_dir, target_transform=target_transform,
                                      verbose=verbose)
             # generate labels-per-task
             labels_per_task = [
