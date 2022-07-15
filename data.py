@@ -287,9 +287,9 @@ def get_multitask_experiment(name, scenario, tasks, data_dir="./datasets", only_
             print("Permutation", permutation)
             target_transform = transforms.Lambda(lambda y, p=permutation: int(p[y]))
             # prepare train and test datasets with all classes
-            cifar10_train = get_dataset('cifar10', type="train", dir=data_dir, target_transform=target_transform,
+            animalpart_train = get_dataset('cifar10', type="train", dir=data_dir, target_transform=target_transform,
                                       verbose=verbose)
-            cifar10_test = get_dataset('cifar10', type="test", dir=data_dir, target_transform=target_transform,
+            animalpart_test = get_dataset('cifar10', type="test", dir=data_dir, target_transform=target_transform,
                                      verbose=verbose)
             # generate labels-per-task
             labels_per_task = [
@@ -302,8 +302,8 @@ def get_multitask_experiment(name, scenario, tasks, data_dir="./datasets", only_
                 target_transform = transforms.Lambda(
                     lambda y, x=labels[0]: y - x
                 ) if scenario=='domain' else None
-                train_datasets.append(SubDataset(cifar10_train, labels, target_transform=target_transform))
-                test_datasets.append(SubDataset(cifar10_test, labels, target_transform=target_transform))
+                train_datasets.append(SubDataset(animalpart_train, labels, target_transform=target_transform))
+                test_datasets.append(SubDataset(animalpart_test, labels, target_transform=target_transform))
                 
     else:
         raise RuntimeError('Given undefined experiment: {}'.format(name))
