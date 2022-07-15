@@ -38,7 +38,7 @@ def get_dataset(name, type='train', download=True, capacity=None, permutation=No
 
     # load data-set
     if name == "animalpart":
-        dataset= datasets.ImageFolder(root="gdrive/MyDrive/Data/animalpart",
+        dataset= torchvision.datasets.DatasetFolder(root="gdrive/MyDrive/Data/animalpart",
                                            transform=dataset_transform, target_transform=target_transform)
         #dataset = dataset_class(train=False if type=='test' else True, transform=dataset_transform, target_transform=target_transform)
     else:   
