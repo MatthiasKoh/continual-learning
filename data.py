@@ -4,8 +4,6 @@ from torchvision import datasets, transforms
 from torch.utils.data import ConcatDataset, Dataset
 import torch
 import pathlib
-from google.colab import drive
-drive.mount('/content/gdrive')
 
 
 def _permutate_image_pixels(image, permutation):
