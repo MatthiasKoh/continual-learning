@@ -36,8 +36,11 @@ def get_dataset(name, type='train', download=True, capacity=None, permutation=No
     ])
 
     # load data-set
-    print({dir}/{name}'.format(dir=dir, name=data_name))
-    dataset = dataset_class('{dir}/{name}'.format(dir=dir, name=data_name), train=False if type=='test' else True,
+    if name == "animalpart":
+        dataset = dataset_class(train=False if type=='test' else True,
+                            download=download, transform=dataset_transform, target_transform=target_transform)
+    else:   
+        dataset = dataset_class('{dir}/{name}'.format(dir=dir, name=data_name), train=False if type=='test' else True,
                             download=download, transform=dataset_transform, target_transform=target_transform)
 
     # print information about dataset on the screen
