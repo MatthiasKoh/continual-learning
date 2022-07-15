@@ -39,7 +39,7 @@ def get_dataset(name, type='train', download=True, capacity=None, permutation=No
     # load data-set
     if name == "animalpart":
         dataset= datasets.ImageFolder(root="gdrive/My Drive/Data/animalpart",
-                                           transform=data_transform)
+                                           transform=dataset_transform, target_transform=target_transform)
         #dataset = dataset_class(train=False if type=='test' else True, transform=dataset_transform, target_transform=target_transform)
     else:   
         dataset = dataset_class('{dir}/{name}'.format(dir=dir, name=data_name), train=False if type=='test' else True,
