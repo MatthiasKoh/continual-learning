@@ -274,12 +274,12 @@ def get_multitask_experiment(name, scenario, tasks, data_dir="./datasets", only_
                 ) if scenario=='domain' else None
                 train_datasets.append(SubDataset(cifar10_train, labels, target_transform=target_transform))
                 test_datasets.append(SubDataset(cifar10_test, labels, target_transform=target_transform))   
-    elif name == 'ANIMAL_PART':
+    elif name == 'ANIMALPART':
         # check for number of tasks
         if tasks>10:
-            raise ValueError("Experiment 'CIFAR10' cannot have more than 10 tasks!")
+            raise ValueError("Experiment 'ANIMALPART' cannot have more than 10 tasks!")
         # configurations
-        config = DATASET_CONFIGS['cifar10']
+        config = DATASET_CONFIGS['animalpart']
         classes_per_task = int(np.floor(10 / tasks))
         if not only_config:
             # prepare permutation to shuffle label-ids (to create different class batches for each random seed)
