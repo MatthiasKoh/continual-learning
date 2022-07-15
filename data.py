@@ -147,7 +147,7 @@ class TransformedDataset(Dataset):
 AVAILABLE_DATASETS = {
     'mnist': datasets.MNIST,
     'cifar10': datasets.CIFAR10,
-    'animalpart': datasets.ANIMAL_PART,
+    'animalpart': data_dir = pathlib.Path("gdrive/My Drive/Data/animalpart"),
 }
 
 # specify available transforms.
