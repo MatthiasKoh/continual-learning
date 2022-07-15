@@ -37,6 +37,7 @@ def get_dataset(name, type='train', download=True, capacity=None, permutation=No
 
     # load data-set
     if name == "animalpart":
+        dataset_class= TransformedDataset(dataset_class)
         dataset = dataset_class(train=False if type=='test' else True, transform=dataset_transform, target_transform=target_transform)
     else:   
         dataset = dataset_class('{dir}/{name}'.format(dir=dir, name=data_name), train=False if type=='test' else True,
