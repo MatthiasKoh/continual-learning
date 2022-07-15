@@ -650,9 +650,6 @@ if __name__ == '__main__':
     # -set default-values for certain arguments based on chosen scenario & experiment
     args = set_default_values(args)
     
-    from google.colab import files
-    uploaded = files.upload()
-    
     #edit to get 10 runs with diff seeds/permuatations of class
     for i in range(10):
       args.seed = i 
