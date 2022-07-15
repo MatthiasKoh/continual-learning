@@ -144,6 +144,7 @@ class TransformedDataset(Dataset):
 AVAILABLE_DATASETS = {
     'mnist': datasets.MNIST,
     'cifar10': datasets.CIFAR10,
+    'animalpart': datasets.ANIMAL_PART,
 }
 
 # specify available transforms.
@@ -158,6 +159,9 @@ AVAILABLE_TRANSFORMS = {
     'cifar10': [
         transforms.ToTensor(),
     ],
+    'animalpart': [
+        transforms.ToTensor(),
+    ],
 }
 
 # specify configurations of available data-sets.
@@ -165,6 +169,7 @@ DATASET_CONFIGS = {
     'mnist': {'size': 32, 'channels': 1, 'classes': 10},
     'mnist28': {'size': 28, 'channels': 1, 'classes': 10},
     'cifar10': {'size': 32, 'channels': 3, 'classes': 10},
+    'animalpart': {'size': 32, 'channels': 3, 'classes': 10},
 }
 
 
@@ -268,7 +273,37 @@ def get_multitask_experiment(name, scenario, tasks, data_dir="./datasets", only_
                 ) if scenario=='domain' else None
                 train_datasets.append(SubDataset(cifar10_train, labels, target_transform=target_transform))
                 test_datasets.append(SubDataset(cifar10_test, labels, target_transform=target_transform))   
-               
+    elif name == 'ANIMAL_PART':
+        # check for number of tasks
+        if tasks>10:
+            raise ValueError("Experiment 'CIFAR10' cannot have more than 10 tasks!")
+        # configurations
+        config = DATASET_CONFIGS['cifar10']
+        classes_per_task = int(np.floor(10 / tasks))
+        if not only_config:
+            # prepare permutation to shuffle label-ids (to create different class batches for each random seed)
+            permutation = np.array(list(range(10))) if exception else np.random.permutation(list(range(10)))
+            print("Permutation", permutation)
+            target_transform = transforms.Lambda(lambda y, p=permutation: int(p[y]))
+            # prepare train and test datasets with all classes
+            cifar10_train = get_dataset('cifar10', type="train", dir=data_dir, target_transform=target_transform,
+                                      verbose=verbose)
+            cifar10_test = get_dataset('cifar10', type="test", dir=data_dir, target_transform=target_transform,
+                                     verbose=verbose)
+            # generate labels-per-task
+            labels_per_task = [
+                list(np.array(range(classes_per_task)) + classes_per_task * task_id) for task_id in range(tasks)
+            ]
+            # split them up into sub-tasks
+            train_datasets = []
+            test_datasets = []
+            for labels in labels_per_task:
+                target_transform = transforms.Lambda(
+                    lambda y, x=labels[0]: y - x
+                ) if scenario=='domain' else None
+                train_datasets.append(SubDataset(cifar10_train, labels, target_transform=target_transform))
+                test_datasets.append(SubDataset(cifar10_test, labels, target_transform=target_transform))
+                
     else:
         raise RuntimeError('Given undefined experiment: {}'.format(name))
 
