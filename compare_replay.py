@@ -19,7 +19,7 @@ parser.add_argument('--results-dir', type=str, default='./results', dest='r_dir'
 
 # expirimental task parameters.
 task_params = parser.add_argument_group('Task Parameters')
-task_params.add_argument('--experiment', type=str, default='splitMNIST', choices=['permMNIST', 'splitMNIST','CIFAR10'])
+task_params.add_argument('--experiment', type=str, default='splitMNIST', choices=['permMNIST', 'splitMNIST','CIFAR10','ANIMALPART'])
 task_params.add_argument('--scenario', type=str, default='task', choices=['task', 'domain', 'class'])
 task_params.add_argument('--tasks', type=int, help='number of tasks')
 
@@ -79,6 +79,7 @@ args = parser.parse_args()
 budget_list_permMNIST = [100, 200, 500, 1000, 2000, 5000, 10000, 20000, 50000]
 budget_list_splitMNIST = [10, 20, 50, 100, 200, 500, 1000, 2000, 5000]
 budget_list_CIFAR10 = [10, 20, 50, 100, 200, 500, 1000, 2000, 5000]
+budget_list_ANIMALPART = [10, 20, 50, 100, 200, 500, 1000, 2000, 5000]
 
 
 def get_prec(args):
@@ -138,6 +139,8 @@ if __name__ == '__main__':
       budget_list = budget_list_permMNIST
     elif args.experiment=="CIFAR10":
       budget_list = budget_list_CIFAR10
+    elif args.experiment=="ANIMALPART":
+      budget_list = budget_list_ANIMALPART
     else:
       budget_list = budget_list_splitMNIST
       
