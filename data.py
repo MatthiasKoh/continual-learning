@@ -36,6 +36,7 @@ def get_dataset(name, type='train', download=True, capacity=None, permutation=No
     ])
 
     # load data-set
+    print({dir}/{name}'.format(dir=dir, name=data_name))
     dataset = dataset_class('{dir}/{name}'.format(dir=dir, name=data_name), train=False if type=='test' else True,
                             download=download, transform=dataset_transform, target_transform=target_transform)
 
@@ -145,7 +146,7 @@ class TransformedDataset(Dataset):
 AVAILABLE_DATASETS = {
     'mnist': datasets.MNIST,
     'cifar10': datasets.CIFAR10,
-    'animalpart': pathlib.str("gdrive/My Drive/Data/animalpart"),
+    'animalpart': pathlib.path("gdrive/My Drive/Data/animalpart"),
 }
 
 # specify available transforms.
