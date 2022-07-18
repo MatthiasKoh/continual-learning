@@ -35,6 +35,7 @@ task_params.add_argument('--experiment', type=str, default='splitMNIST', choices
 task_params.add_argument('--scenario', type=str, default='class', choices=['task', 'domain', 'class'])
 task_params.add_argument('--tasks', type=int, help='number of tasks')
 task_params.add_argument('--runs', type=int,default=1) #new
+task_params.add_argument('--localdata', default = none)
 
 # specify loss functions to be used
 loss_params = parser.add_argument_group('Loss Parameters')
@@ -654,8 +655,8 @@ if __name__ == '__main__':
     args = set_default_values(args)
     
     if args.experiment == "ANIMALPART":
-      from google.colab import files
-      uploaded = files.upload()
+      data = args.localdata
+      print("WORKS!")
     
     #edit to get 10 runs with diff seeds/permuatations of class
     for i in range(args.runs):
