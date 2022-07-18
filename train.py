@@ -345,14 +345,14 @@ def train_cl(model, train_datasets,test_datasets, result_list, replay_mode="none
           precs_e_task = evaluate.validate(model, ecurrent_test_datasets, verbose=False, test_size=None, task=task, with_exemplars=True,
             allowed_classes=list(range(classes_per_task*(task-1), classes_per_task*(task))) if scenario=="task" else None)
           print(" - Exemplars Task {} testset{}: {:.4f}".format(task,0 , precs_e_task))
-          result_list.append([precs_task])
+          result_list.append([precs_e_task])
           
           for i in range(1,task):
             ecurrent_test_datasets+= test_datasets[i]
             precs_e_task = evaluate.validate(model, ecurrent_test_datasets, verbose=False, test_size=None, task=task, with_exemplars=True,
             allowed_classes=list(range(classes_per_task*(task-1), classes_per_task*(task))) if scenario=="task" else None)
             print(" - Exemplars Task {} testset{}: {:.4f}".format(task,i , precs_e_task))
-            result_list[task-1].append(precs_task)
+            result_list[task-1].append(precs_e_task)
       
           #print("\n\n Exemplars 1st task EVALUATION RESULTS:")
           #precs_e1_task = evaluate.validate( 
