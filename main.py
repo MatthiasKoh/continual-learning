@@ -642,7 +642,8 @@ def run(args, verbose=False):
         # -print name of generated plot on screen
         if verbose:
             print("\nGenerated plot: {}\n".format(plot_name))
-
+    
+    return result_list
 
 
 if __name__ == '__main__':
@@ -656,7 +657,8 @@ if __name__ == '__main__':
       args.seed = i 
       print("START of NEW RUN", args.seed)
       # -run experiment
-      run(args, verbose=True)
+      result= run(args, verbose=True)
+      print(result_list)
 
 
     
