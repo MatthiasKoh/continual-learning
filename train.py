@@ -11,7 +11,7 @@ import evaluate
 
 
 #added Test_datasets for Evaluation
-def train_cl(model, train_datasets,test_datasets, replay_mode="none", scenario="class",classes_per_task=None,iters=2000,batch_size=32,
+def train_cl(model, train_datasets,test_datasets, result_list, replay_mode="none", scenario="class",classes_per_task=None,iters=2000,batch_size=32,
              generator=None, gen_iters=0, gen_loss_cbs=list(), loss_cbs=list(), eval_cbs=list(), sample_cbs=list(),
              use_exemplars=True, add_exemplars=False, metric_cbs=list()):
     '''Train a model (with a "train_a_batch" method) on multiple tasks, with replay-strategy specified by [replay_mode].
@@ -292,13 +292,17 @@ def train_cl(model, train_datasets,test_datasets, replay_mode="none", scenario="
         current_test_datasets = test_datasets[0]
         for i in range(1,task):
           current_test_datasets+= test_datasets[i]
-        precs_task = evaluate.validate(model, current_test_datasets, verbose=False, test_size=None, with_exemplars=False)
-        print(" - Task {}: {:.4f}".format(task , precs_task))
+          precs_task = evaluate.validate(model, current_test_datasets, verbose=False, test_size=None, with_exemplars=False)
+          print(" - Task {} testset{}: {:.4f}".format(task, i , precs_task))
+          if i ==1:
+            result_list.append([precs_task])
+          else:
+            result_list[task].append([precs_task])
         
-        print("\n\n 1st task EVALUATION RESULTS:")
+        #print("\n\n 1st task EVALUATION RESULTS:")
          # to get 1st task accuracy {can extend to for each task)
-        precs_1_task = evaluate.validate(model, test_datasets[0], verbose=False, test_size=None, with_exemplars=False)
-        print(" - Task {}: {:.4f}".format(task , precs_1_task))
+        #precs_1_task = evaluate.validate(model, test_datasets[0], verbose=False, test_size=None, with_exemplars=False)
+       # print(" - Task {}: {:.4f}".format(task , precs_1_task))
         
         # EWC: estimate Fisher Information matrix (FIM) and update term for quadratic penalty
         if isinstance(model, ContinualLearner) and (model.ewc_lambda>0):
@@ -338,16 +342,19 @@ def train_cl(model, train_datasets,test_datasets, replay_mode="none", scenario="
           ecurrent_test_datasets = test_datasets[0]
           for i in range(1,task):
             ecurrent_test_datasets+= test_datasets[i]
-          precs_e_task = evaluate.validate(
-            model, ecurrent_test_datasets, verbose=False, test_size=None, task=task, with_exemplars=True,
+            precs_e_task = evaluate.validate(model, ecurrent_test_datasets, verbose=False, test_size=None, task=task, with_exemplars=True,
             allowed_classes=list(range(classes_per_task*(task-1), classes_per_task*(task))) if scenario=="task" else None)
-          print(" - Task {}: {:.4f}".format(task , precs_e_task))
+            print(" - Exemplars Task {} testset{}: {:.4f}".format(task,i , precs_e_task))
+            if i ==1:
+              result_list.append([precs_task])
+            else:
+              result_list[task].append([precs_task])
       
-          print("\n\n Exemplars 1st task EVALUATION RESULTS:")
-          precs_e1_task = evaluate.validate( 
-            model, test_datasets[0], verbose=False, test_size=None, task=task, with_exemplars=True,
-            allowed_classes=list(range(classes_per_task*(task-1), classes_per_task*(task))) if scenario=="task" else None)
-          print(" - Task {}: {:.4f}".format(task, precs_e1_task))
+          #print("\n\n Exemplars 1st task EVALUATION RESULTS:")
+          #precs_e1_task = evaluate.validate( 
+          #  model, test_datasets[0], verbose=False, test_size=None, task=task, with_exemplars=True,
+          #  allowed_classes=list(range(classes_per_task*(task-1), classes_per_task*(task))) if scenario=="task" else None)
+          #print(" - Task {}: {:.4f}".format(task, precs_e1_task))
 
         # Calculate statistics required for metrics
         for metric_cb in metric_cbs:
