@@ -658,6 +658,7 @@ if __name__ == '__main__':
     if args.experiment == "ANIMALPART":
       data = args.localdata
       print(args.localdata)
+      print(type(data))
       print("WORKS!")
     else:
       print("SKIPPED")
