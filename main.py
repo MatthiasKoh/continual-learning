@@ -653,7 +653,7 @@ if __name__ == '__main__':
     args = set_default_values(args)
     
     #edit to get 10 runs with diff seeds/permuatations of class
-    for i in range(10):
+    for i in range(1):
       args.seed = i 
       print("START of NEW RUN", args.seed)
       # -run experiment
