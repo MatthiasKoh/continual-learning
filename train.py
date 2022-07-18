@@ -297,7 +297,7 @@ def train_cl(model, train_datasets,test_datasets, result_list, replay_mode="none
           if i ==1:
             result_list.append([precs_task])
           else:
-            result_list[task].append([precs_task])
+            result_list[task-1].append([precs_task])
         
         #print("\n\n 1st task EVALUATION RESULTS:")
          # to get 1st task accuracy {can extend to for each task)
@@ -348,7 +348,7 @@ def train_cl(model, train_datasets,test_datasets, result_list, replay_mode="none
             if i ==1:
               result_list.append([precs_task])
             else:
-              result_list[task].append([precs_task])
+              result_list[task-1].append([precs_task])
       
           #print("\n\n Exemplars 1st task EVALUATION RESULTS:")
           #precs_e1_task = evaluate.validate( 
