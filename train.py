@@ -291,7 +291,7 @@ def train_cl(model, train_datasets,test_datasets, result_list, replay_mode="none
             # to get cumulative task accuracy 
         current_test_datasets = test_datasets[0]
         precs_task = evaluate.validate(model, current_test_datasets, verbose=False, test_size=None, with_exemplars=False)
-        print(" - Task {} testset{}: {:.4f}".format(task, i , precs_task))
+        print(" - Task {} testset{}: {:.4f}".format(task, 0, precs_task))
         result_list.append([precs_task])
         for i in range(1, task):
           current_test_datasets+= test_datasets[i]
@@ -342,10 +342,10 @@ def train_cl(model, train_datasets,test_datasets, result_list, replay_mode="none
           ecurrent_test_datasets = test_datasets[0]
           precs_e_task = evaluate.validate(model, ecurrent_test_datasets, verbose=False, test_size=None, task=task, with_exemplars=True,
             allowed_classes=list(range(classes_per_task*(task-1), classes_per_task*(task))) if scenario=="task" else None)
-          print(" - Exemplars Task {} testset{}: {:.4f}".format(task,i , precs_e_task))
+          print(" - Exemplars Task {} testset{}: {:.4f}".format(task,0 , precs_e_task))
           result_list.append([precs_task])
           
-          for i in range(task):
+          for i in range(1,task):
             ecurrent_test_datasets+= test_datasets[i]
             precs_e_task = evaluate.validate(model, ecurrent_test_datasets, verbose=False, test_size=None, task=task, with_exemplars=True,
             allowed_classes=list(range(classes_per_task*(task-1), classes_per_task*(task))) if scenario=="task" else None)
