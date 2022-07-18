@@ -654,9 +654,10 @@ if __name__ == '__main__':
     # -set default-values for certain arguments based on chosen scenario & experiment
     args = set_default_values(args)
     
-    print(args.experiment)
+    
     if args.experiment == "ANIMALPART":
       data = args.localdata
+      print(args.localdata)
       print("WORKS!")
     else:
       print("SKIPPED")
