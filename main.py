@@ -201,6 +201,7 @@ def run(args, verbose=False):
         name=args.experiment, scenario=scenario, tasks=args.tasks, data_dir=args.d_dir,
         verbose=verbose, exception=True if args.seed==0 else False,
     )
+    result_list =[]
 
 
     #-------------------------------------------------------------------------------------------------#
@@ -429,7 +430,7 @@ def run(args, verbose=False):
     start = time.time()
     # Train model
     train_cl(
-        model, train_datasets,test_datasets, replay_mode=args.replay, scenario=scenario, classes_per_task=classes_per_task,
+        model, train_datasets,test_datasets,result_list, replay_mode=args.replay, scenario=scenario, classes_per_task=classes_per_task,
         iters=args.iters, batch_size=args.batch,
         generator=generator, gen_iters=args.g_iters, gen_loss_cbs=generator_loss_cbs,
         sample_cbs=sample_cbs, eval_cbs=eval_cbs, loss_cbs=generator_loss_cbs if args.feedback else solver_loss_cbs,
