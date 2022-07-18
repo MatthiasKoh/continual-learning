@@ -289,15 +289,17 @@ def train_cl(model, train_datasets,test_datasets, result_list, replay_mode="none
         print("\n\n TASK EVALUATION RESULTS:")
         print("\n\n Combination of testsets EVALUATION RESULTS:")
             # to get cumulative task accuracy 
-        current_test_datasets = test_datasets[0]
-        precs_task = evaluate.validate(model, current_test_datasets, verbose=False, test_size=None, with_exemplars=False)
-        print(" - Task {} testset{}: {:.4f}".format(task, 0, precs_task))
-        result_list.append([precs_task])
-        for i in range(1, task):
-          current_test_datasets+= test_datasets[i]
+        if not use_exemplars:
+          current_test_datasets = test_datasets[0]
           precs_task = evaluate.validate(model, current_test_datasets, verbose=False, test_size=None, with_exemplars=False)
-          print(" - Task {} testset{}: {:.4f}".format(task, i , precs_task))
-          result_list[task-1].append(precs_task)
+          print(" - Task {} testset{}: {:.4f}".format(task, 0, precs_task))
+          result_list.append([precs_task])
+          for i in range(1, task):
+            current_test_datasets+= test_datasets[i]
+            precs_task = evaluate.validate(model, current_test_datasets, verbose=False, test_size=None, with_exemplars=False)
+            print(" - Task {} testset{}: {:.4f}".format(task, i , precs_task))
+            result_list[task-1].append(precs_task)
+        
         
         #print("\n\n 1st task EVALUATION RESULTS:")
          # to get 1st task accuracy {can extend to for each task)
