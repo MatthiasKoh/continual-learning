@@ -299,6 +299,8 @@ def get_multitask_experiment(name, scenario, tasks, data_dir="./datasets", only_
         # configurations
         config = DATASET_CONFIGS['animalpart']
         classes_per_task = int(np.floor(8 / tasks))
+        ##################### REMOVE #################
+        print("Class per task", classes_per_task)
         if not only_config:
             # prepare permutation to shuffle label-ids (to create different class batches for each random seed)
             permutation = np.array(list(range(8))) if exception else np.random.permutation(list(range(8)))
@@ -309,10 +311,15 @@ def get_multitask_experiment(name, scenario, tasks, data_dir="./datasets", only_
                                       verbose=verbose)
             animalpart_test = get_dataset('animalpart', type="test", dir=data_dir, target_transform=target_transform,
                                      verbose=verbose)
+            ##################### REMOVE #################
+            print("GOT DATASETS")
             # generate labels-per-task
             labels_per_task = [
                 list(np.array(range(classes_per_task)) + classes_per_task * task_id) for task_id in range(tasks)
             ]
+            ##################### REMOVE #################
+            print("GENERATED LABELS")
+            
             # split them up into sub-tasks
             train_datasets = []
             test_datasets = []
