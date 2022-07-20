@@ -665,7 +665,8 @@ if __name__ == '__main__':
     args = set_default_values(args)
     
     dataset = torchvision.datasets.ImageFolder("/content/drive/My Drive/Data/animalpart/")
-    print(dataset, type(dataset))
+    print(dataset)
+    print(type(dataset))
     
     if args.experiment == "ANIMALPART":
       data = args.localdata
