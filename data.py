@@ -153,7 +153,7 @@ class TransformedDataset(Dataset):
 AVAILABLE_DATASETS = {
     'mnist': datasets.MNIST,
     'cifar10': datasets.CIFAR10,
-    'animalpart': pathlib.Path("gdrive/My Drive/Data/animalpart"),
+    #'animalpart': pathlib.Path("gdrive/My Drive/Data/animalpart"),
 }
 
 # specify available transforms.
@@ -169,6 +169,7 @@ AVAILABLE_TRANSFORMS = {
         transforms.ToTensor(),
     ],
     'animalpart': [
+        transforms.Resize((round(32), round(32))),
         transforms.ToTensor(),
     ],
 }
@@ -223,6 +224,7 @@ def get_multitask_experiment(name, scenario, tasks, data_dir="./datasets", only_
                     test_dataset, transform=transforms.Lambda(lambda x, p=perm: _permutate_image_pixels(x, p)),
                     target_transform=target_transform
                 ))
+                
     elif name == 'splitMNIST':
         # check for number of tasks
         if tasks>10:
@@ -252,6 +254,7 @@ def get_multitask_experiment(name, scenario, tasks, data_dir="./datasets", only_
                 ) if scenario=='domain' else None
                 train_datasets.append(SubDataset(mnist_train, labels, target_transform=target_transform))
                 test_datasets.append(SubDataset(mnist_test, labels, target_transform=target_transform))
+                
     elif name == 'CIFAR10':
         # check for number of tasks
         if tasks>10:
@@ -281,7 +284,8 @@ def get_multitask_experiment(name, scenario, tasks, data_dir="./datasets", only_
                     lambda y, x=labels[0]: y - x
                 ) if scenario=='domain' else None
                 train_datasets.append(SubDataset(cifar10_train, labels, target_transform=target_transform))
-                test_datasets.append(SubDataset(cifar10_test, labels, target_transform=target_transform))   
+                test_datasets.append(SubDataset(cifar10_test, labels, target_transform=target_transform)) 
+               
     elif name == 'ANIMALPART':
         # check for number of tasks
         if tasks>8:
