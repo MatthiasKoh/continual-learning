@@ -311,14 +311,12 @@ def get_multitask_experiment(name, scenario, tasks, data_dir="./datasets", only_
                                       verbose=verbose)
             animalpart_test = get_dataset('animalpart', type="test", dir=data_dir, target_transform=target_transform,
                                      verbose=verbose)
-            ##################### REMOVE #################
-            print("GOT DATASETS")
             # generate labels-per-task
             labels_per_task = [
                 list(np.array(range(classes_per_task)) + classes_per_task * task_id) for task_id in range(tasks)
             ]
             ##################### REMOVE #################
-            print("GENERATED LABELS")
+            print("GENERATED LABELS", labels_per_task)
             
             # split them up into sub-tasks
             train_datasets = []
