@@ -42,7 +42,13 @@ def get_dataset(name, type='train', download=True, capacity=None, permutation=No
     # load data-set
     if name == "animalpart":
         dataset = torchvision.datasets.ImageFolder("/content/drive/My Drive/Data/animalpart/",transform=dataset_transform, target_transform=target_transform)
-       
+        train_size = int(0.7 * len(full_dataset))
+        test_size = len(full_dataset) - train_size
+        train_dataset, test_dataset = torch.utils.data.random_split(full_dataset, [train_size, test_size])
+        if type == 'test':
+            dataset = test_dataset
+        else:
+            dataset = train_dataset
     else:   
         dataset = dataset_class('{dir}/{name}'.format(dir=dir, name=data_name), train=False if type=='test' else True,
                             download=download, transform=dataset_transform, target_transform=target_transform)
