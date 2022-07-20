@@ -4,6 +4,9 @@ from torchvision import datasets, transforms
 from torch.utils.data import ConcatDataset, Dataset
 import torch
 import pathlib
+import torchvision
+from torchvision.datasets import CIFAR10, STL10
+from torchvision import transforms
 
 
 def _permutate_image_pixels(image, permutation):
