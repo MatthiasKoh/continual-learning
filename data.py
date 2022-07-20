@@ -38,9 +38,8 @@ def get_dataset(name, type='train', download=True, capacity=None, permutation=No
 
     # load data-set
     if name == "animalpart":
-        dataset= datasets.DatasetFolder(root="gdrive/MyDrive/Data/animalpart",
-                                           transform=dataset_transform, target_transform=target_transform)
-        #dataset = dataset_class(train=False if type=='test' else True, transform=dataset_transform, target_transform=target_transform)
+        dataset = torchvision.datasets.ImageFolder("/content/drive/My Drive/Data/animalpart/",transform=dataset_transform, target_transform=target_transform)
+       
     else:   
         dataset = dataset_class('{dir}/{name}'.format(dir=dir, name=data_name), train=False if type=='test' else True,
                             download=download, transform=dataset_transform, target_transform=target_transform)
@@ -282,14 +281,14 @@ def get_multitask_experiment(name, scenario, tasks, data_dir="./datasets", only_
                 test_datasets.append(SubDataset(cifar10_test, labels, target_transform=target_transform))   
     elif name == 'ANIMALPART':
         # check for number of tasks
-        if tasks>10:
-            raise ValueError("Experiment 'ANIMALPART' cannot have more than 10 tasks!")
+        if tasks>8:
+            raise ValueError("Experiment 'ANIMALPART' cannot have more than 8 tasks!")
         # configurations
         config = DATASET_CONFIGS['animalpart']
-        classes_per_task = int(np.floor(10 / tasks))
+        classes_per_task = int(np.floor(8 / tasks))
         if not only_config:
             # prepare permutation to shuffle label-ids (to create different class batches for each random seed)
-            permutation = np.array(list(range(10))) if exception else np.random.permutation(list(range(10)))
+            permutation = np.array(list(range(8))) if exception else np.random.permutation(list(range(8)))
             print("Permutation", permutation)
             target_transform = transforms.Lambda(lambda y, p=permutation: int(p[y]))
             # prepare train and test datasets with all classes
