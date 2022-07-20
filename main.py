@@ -19,6 +19,16 @@ from continual_learner import ContinualLearner
 from exemplars import ExemplarHandler
 from replayer import Replayer
 from param_values import set_default_values
+## PyTorch
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+import torch.utils.data as data
+import torch.optim as optim
+## Torchvision
+import torchvision
+from torchvision.datasets import CIFAR10, STL10
+from torchvision import transforms
 
 
 parser = argparse.ArgumentParser('./main.py', description='Run individual continual learning experiment.')
