@@ -35,7 +35,7 @@ task_params.add_argument('--experiment', type=str, default='splitMNIST', choices
 task_params.add_argument('--scenario', type=str, default='class', choices=['task', 'domain', 'class'])
 task_params.add_argument('--tasks', type=int, help='number of tasks')
 task_params.add_argument('--runs', type=int,default=1) #new
-task_params.add_argument('--localdata')
+task_params.add_argument('--localdata', type = torchvision.datasets.folder.ImageFolder, default = None )
 
 # specify loss functions to be used
 loss_params = parser.add_argument_group('Loss Parameters')
