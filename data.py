@@ -327,6 +327,7 @@ def get_multitask_experiment(name, scenario, tasks, data_dir="./datasets", only_
                 ) if scenario=='domain' else None
                 train_datasets.append(SubDataset(animalpart_train, labels, target_transform=target_transform))
                 test_datasets.append(SubDataset(animalpart_test, labels, target_transform=target_transform))
+                print("label", labels, "done")
             print("THIS IS DONE")
                 
     else:
