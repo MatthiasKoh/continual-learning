@@ -290,15 +290,13 @@ def train_cl(model, train_datasets,test_datasets, result_list, replay_mode="none
         print("\n\n Combination of testsets EVALUATION RESULTS:")
             # to get cumulative task accuracy 
         if not use_exemplars:
-          current_test_datasets = test_datasets[0]
-          precs_task = evaluate.validate(model, current_test_datasets, verbose=False, test_size=None, with_exemplars=False)
-          print(" - Task {} testset{}: {:.4f}".format(task, 0, precs_task))
-          result_list.append([precs_task])
-          for i in range(1, task):
-            current_test_datasets+= test_datasets[i]
-            precs_task = evaluate.validate(model, current_test_datasets, verbose=False, test_size=None, with_exemplars=False)
+          for i in range(task):
+            precs_task = evaluate.validate(model, test_datasets[i], verbose=False, test_size=None, with_exemplars=False)
             print(" - Task {} testset{}: {:.4f}".format(task, i , precs_task))
-            result_list[task-1].append(precs_task)
+            if i ==0:
+              result_list.append([precs_task])
+            else:
+              result_list[task-1].append(precs_task)
         
         
         #print("\n\n 1st task EVALUATION RESULTS:")
@@ -341,18 +339,14 @@ def train_cl(model, train_datasets,test_datasets, result_list, replay_mode="none
          # -with exemplars
         if use_exemplars:
           print("\n\n Exemplars Combination of testsets EVALUATION RESULTS:")
-          ecurrent_test_datasets = test_datasets[0]
-          precs_e_task = evaluate.validate(model, ecurrent_test_datasets, verbose=False, test_size=None, task=task, with_exemplars=True,
-            allowed_classes=list(range(classes_per_task*(task-1), classes_per_task*(task))) if scenario=="task" else None)
-          print(" - Exemplars Task {} testset{}: {:.4f}".format(task,0 , precs_e_task))
-          result_list.append([precs_e_task])
-          
-          for i in range(1,task):
-            ecurrent_test_datasets+= test_datasets[i]
-            precs_e_task = evaluate.validate(model, ecurrent_test_datasets, verbose=False, test_size=None, task=task, with_exemplars=True,
+          for i in range(task):
+            precs_e_task = evaluate.validate(model, test_datasets[i], verbose=False, test_size=None, task=task, with_exemplars=True,
             allowed_classes=list(range(classes_per_task*(task-1), classes_per_task*(task))) if scenario=="task" else None)
             print(" - Exemplars Task {} testset{}: {:.4f}".format(task,i , precs_e_task))
-            result_list[task-1].append(precs_e_task)
+            if i ==0:
+              result_list.append([precs_e_task])
+            else:
+              result_list[task-1].append(precs_e_task)
       
           #print("\n\n Exemplars 1st task EVALUATION RESULTS:")
           #precs_e1_task = evaluate.validate( 
