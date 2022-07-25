@@ -671,7 +671,7 @@ if __name__ == '__main__':
       # -run experiment
       result_list= run(args, verbose=True)
       print(result_list)
-    return result_list
+      result.append(result_list)
 
 
     
