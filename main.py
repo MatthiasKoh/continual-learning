@@ -661,8 +661,12 @@ def run(args, verbose=False):
 if __name__ == '__main__':
     # -load input-arguments
     args = parser.parse_args()
+    
     # -set default-values for certain arguments based on chosen scenario & experiment
     args = set_default_values(args)
+ 
+    #Create a list to store accuracy data
+    accuracy_data =[]
     
     #edit to get args.runs number of runs with diff seeds/permuatations of class
     for i in range(args.runs):
@@ -671,7 +675,11 @@ if __name__ == '__main__':
       # -run experiment
       result_list= run(args, verbose=True)
       print(result_list)
-      result.append(result_list)
+      accuracy_data.append(result_list)
+      print(accuracy_data)
+    
+    #From accuracy_data after n number of runs
+    
 
 
     
