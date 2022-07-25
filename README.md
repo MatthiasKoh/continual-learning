@@ -16,9 +16,10 @@ The current version of the code has been tested with:
 
 ## Running the experiments
 Individual experiments can be run with `main.py`. Main options are:
-- `--experiment`: which task protocol? (`splitMNIST`|`permMNIST`|`CIFAR10`)
+- `--experiment`: which task protocol? (`splitMNIST`|`permMNIST`|`CIFAR10`|`ANIMALPART`)
 - `--scenario`: according to which scenario? (`task`|`domain`|`class`)
 - `--tasks`: how many tasks?
+- `--runs`: how many runs do you want i.e. how many different shuffle of classes eg. [1,2,3],[3,2,1],[2,3,1]....
 
 To run specific methods, you can use the following:
 - Context-dependent-Gating (XdG): `./main.py --xdg=0.8`
