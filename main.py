@@ -19,6 +19,7 @@ from continual_learner import ContinualLearner
 from exemplars import ExemplarHandler
 from replayer import Replayer
 from param_values import set_default_values
+from statistics import mean
 ## PyTorch
 import torch
 import torch.nn as nn
@@ -678,8 +679,31 @@ if __name__ == '__main__':
       accuracy_data.append(result_list)
       print(accuracy_data)
     
-    #From accuracy_data after n number of runs
-    
+    #From accuracy_data after n number of runs get 1st task accuracy and avg accuracy
+    #calculate average first task accuracy and avg accuracy
+    first_task =[]
+    avg_accuracy =[]
+    k=0
+    for i in r:
+      for j in i:
+        if k in [0,1,2,3,4]:
+          first_task.append([j[0]])
+          avg_accuracy.append([mean(j)])
+        else:
+          first_task[k%5].append(j[0])
+          avg_accuracy[k%5].append(mean(j))
+        k+=1
+    print(first_task)
+    print(avg_accuracy)
+
+    #Get average for first task and avg for all avg accuracy over all runs
+    for i in range(len(first_task)):
+      first_task[i]= mean(first_task[i])
+      avg_accuracy[i]= mean(avg_accuracy[i])
+
+    print(first_task)
+    print(avg_accuracy)
+
 
 
     
