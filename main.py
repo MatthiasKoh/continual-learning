@@ -684,7 +684,7 @@ if __name__ == '__main__':
     first_task =[]
     avg_accuracy =[]
     k=0
-    for i in r:
+    for i in accuracy_data:
       for j in i:
         if k in [0,1,2,3,4]:
           first_task.append([j[0]])
