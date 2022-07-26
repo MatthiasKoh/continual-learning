@@ -16,7 +16,7 @@ The current version of the code has been tested with:
 
 ## Running the experiments
 Individual experiments can be run with `main.py`. Main options are:
-- `--experiment`: which task protocol? (`splitMNIST`|`permMNIST`|`CIFAR10`|`ANIMALPART`|`ABLATED HEAD`|`ABLATED TORSO`|`ABLATED TAIL`|`ALLANIMALPART`)
+- `--experiment`: which task protocol? (`splitMNIST`|`permMNIST`|`CIFAR10`|`ANIMALPART`|`ABLATEDHEAD`|`ABLATEDTORSO`|`ABLATEDTAIL`|`ALLANIMALPART`)
 - `--scenario`: according to which scenario? (`task`|`domain`|`class`)
 - `--tasks`: how many tasks?
 - `--runs`: how many runs do you want i.e. how many different shuffle of classes eg. [1,2,3],[3,2,1],[2,3,1]....
