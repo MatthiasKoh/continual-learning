@@ -11,7 +11,7 @@ import evaluate
 
 
 #added Test_datasets for Evaluation                                                                                       #default was iters= 2000
-def train_cl(model, train_datasets,test_datasets, result_list, replay_mode="none", scenario="class",classes_per_task=None,iters=200,batch_size=32,
+def train_cl(model, train_datasets,test_datasets, result_list, original_datasets= none, replay_mode="none", scenario="class",classes_per_task=None,iters=200,batch_size=32,
              generator=None, gen_iters=0, gen_loss_cbs=list(), loss_cbs=list(), eval_cbs=list(), sample_cbs=list(),
              use_exemplars=True, add_exemplars=False, metric_cbs=list()):
     '''Train a model (with a "train_a_batch" method) on multiple tasks, with replay-strategy specified by [replay_mode].
@@ -297,12 +297,13 @@ def train_cl(model, train_datasets,test_datasets, result_list, replay_mode="none
               result_list.append([precs_task])
             else:
               result_list[task-1].append(precs_task)
+              
+          if original_datasets != none:
+            print("\n\n Original picture testsets EVALUATION RESULTS:")
+            oprecs_task = evaluate.validate(model, original_datasets[i], verbose=False, test_size=None, with_exemplars=False)
+            print(" - Original Task {} testset{}: {:.4f}".format(task, i , oprecs_task))
         
         
-        #print("\n\n 1st task EVALUATION RESULTS:")
-         # to get 1st task accuracy {can extend to for each task)
-        #precs_1_task = evaluate.validate(model, test_datasets[0], verbose=False, test_size=None, with_exemplars=False)
-       # print(" - Task {}: {:.4f}".format(task , precs_1_task))
         
         # EWC: estimate Fisher Information matrix (FIM) and update term for quadratic penalty
         if isinstance(model, ContinualLearner) and (model.ewc_lambda>0):
@@ -347,12 +348,12 @@ def train_cl(model, train_datasets,test_datasets, result_list, replay_mode="none
               result_list.append([precs_e_task])
             else:
               result_list[task-1].append(precs_e_task)
-      
-          #print("\n\n Exemplars 1st task EVALUATION RESULTS:")
-          #precs_e1_task = evaluate.validate( 
-          #  model, test_datasets[0], verbose=False, test_size=None, task=task, with_exemplars=True,
-          #  allowed_classes=list(range(classes_per_task*(task-1), classes_per_task*(task))) if scenario=="task" else None)
-          #print(" - Task {}: {:.4f}".format(task, precs_e1_task))
+              
+          if original_datasets != none:
+            print("\n\n Exemplars Original picture testsets EVALUATION RESULTS:")
+            oprecs_e_task = evaluate.validate(model, original_datasets[i], verbose=False, test_size=None, with_exemplars=True)
+            print(" - Exemplars Original Task {} testset{}: {:.4f}".format(task, i , oprecs_e_task))
+        
 
         # Calculate statistics required for metrics
         for metric_cb in metric_cbs:
