@@ -423,10 +423,10 @@ def get_multitask_experiment(name, scenario, tasks, data_dir="./datasets", only_
     elif name == 'ALLANIMALPART': ############### RECHECK NOT TOO SURE#########!!!!!
         # check for number of tasks
         if tasks>8:
-            raise ValueError("Experiment 'ANIMALPART' cannot have more than 8 tasks!")
+            raise ValueError("Experiment 'ANIMALPART' cannot have more than 3 tasks!")
         # configurations
         config = DATASET_CONFIGS['allanimalpart']
-        classes_per_task = int(np.floor(8 / tasks))
+        classes_per_task = 3
         ##################### REMOVE #################
         print("Class per task", classes_per_task)
         if not only_config:
