@@ -24,8 +24,8 @@ def _permutate_image_pixels(image, permutation):
         image = image.view(c, h, w)
         return image
 
-
-def get_dataset(name, type='train', download=True, capacity=None, permutation=None, dir='./datasets',
+#ablted flag to allow reading in of original images to all be used as test so no spliting into train and test needed
+def get_dataset(name, type='train',ablated=False, download=True, capacity=None, permutation=None, dir='./datasets',
                 verbose=False, target_transform=None):
     '''Create [train|valid|test]-dataset.'''
 
@@ -40,8 +40,11 @@ def get_dataset(name, type='train', download=True, capacity=None, permutation=No
     ])
 
     # load data-set
-    if name == "animalpart":
-        dataset = torchvision.datasets.ImageFolder("/content/drive/My Drive/Data/animalpart/",transform=dataset_transform, target_transform=target_transform)
+    if name =="animalpart" and ablated==True:
+        dataset = torchvision.datasets.ImageFolder(f"/content/drive/My Drive/Data/{name}/",transform=dataset_transform, target_transform=target_transform)
+    
+    elif name in ["animalpart","ablatedhead","ablatedtorso","ablatedtail","allanimalpart"] :
+        dataset = torchvision.datasets.ImageFolder(f"/content/drive/My Drive/Data/{name}/",transform=dataset_transform, target_transform=target_transform)
         print(dataset)
         train_size = int(0.7 * len(dataset))
         test_size = len(dataset) - train_size
@@ -50,6 +53,7 @@ def get_dataset(name, type='train', download=True, capacity=None, permutation=No
             dataset = test_dataset
         else:
             dataset = train_dataset
+i
     else:   
         dataset = dataset_class('{dir}/{name}'.format(dir=dir, name=data_name), train=False if type=='test' else True,
                             download=download, transform=dataset_transform, target_transform=target_transform)
@@ -177,7 +181,23 @@ AVAILABLE_TRANSFORMS = {
         transforms.ToTensor(),
     ],
     'animalpart': [
-        transforms.Resize((round(32), round(32))),
+        transforms.Resize((round(224), round(224))),
+        transforms.ToTensor(),
+    ],
+    'allanimalpart': [
+        transforms.Resize((round(224), round(224))),
+        transforms.ToTensor(),
+    ],
+    'ablatedhead': [
+        transforms.Resize((round(224), round(224))),
+        transforms.ToTensor(),
+    ],
+    'ablatedtorso': [
+        transforms.Resize((round(224), round(224))),
+        transforms.ToTensor(),
+    ],
+    'ablatedtail': [
+        transforms.Resize((round(224), round(224))),
         transforms.ToTensor(),
     ],
 }
@@ -187,7 +207,12 @@ DATASET_CONFIGS = {
     'mnist': {'size': 32, 'channels': 1, 'classes': 10},
     'mnist28': {'size': 28, 'channels': 1, 'classes': 10},
     'cifar10': {'size': 32, 'channels': 3, 'classes': 10},
-    'animalpart': {'size': 32, 'channels': 3, 'classes': 10},
+    'animalpart': {'size': 224, 'channels': 3, 'classes': 8},
+    'allanimalpart': {'size': 224, 'channels': 3, 'classes': 8},
+    'ablatedhead': {'size': 224, 'channels': 3, 'classes': 8},
+    'ablatedtorso': {'size': 224, 'channels': 3, 'classes': 8},
+    'ablatedtail': {'size': 224, 'channels': 3, 'classes': 8},
+    
 }
 
 
@@ -293,8 +318,8 @@ def get_multitask_experiment(name, scenario, tasks, data_dir="./datasets", only_
                 ) if scenario=='domain' else None
                 train_datasets.append(SubDataset(cifar10_train, labels, target_transform=target_transform))
                 test_datasets.append(SubDataset(cifar10_test, labels, target_transform=target_transform)) 
-               
-    elif name == 'ANIMALPART':
+                
+    elif name =='ANIMALPART':
         # check for number of tasks
         if tasks>8:
             raise ValueError("Experiment 'ANIMALPART' cannot have more than 8 tasks!")
@@ -308,11 +333,13 @@ def get_multitask_experiment(name, scenario, tasks, data_dir="./datasets", only_
             permutation = np.array(list(range(8))) if exception else np.random.permutation(list(range(8)))
             print("Permutation", permutation)
             target_transform = transforms.Lambda(lambda y, p=permutation: int(p[y]))
+            
             # prepare train and test datasets with all classes
             animalpart_train = get_dataset('animalpart', type="train", dir=data_dir, target_transform=target_transform,
                                       verbose=verbose)
             animalpart_test = get_dataset('animalpart', type="test", dir=data_dir, target_transform=target_transform,
                                      verbose=verbose)
+            
             # generate labels-per-task
             labels_per_task = [
                 list(np.array(range(classes_per_task)) + classes_per_task * task_id) for task_id in range(tasks)
@@ -323,18 +350,129 @@ def get_multitask_experiment(name, scenario, tasks, data_dir="./datasets", only_
             # split them up into sub-tasks
             train_datasets = []
             test_datasets = []
+            if name in ['ABLATEDHEAD','ABLATEDTORSO','ABLATEDTAIL']:
+                ablatedtrain_datasets=[]
+                ablatedtest_datasets=[]
+                
             for labels in labels_per_task:
-                print("label", labels, "start")
                 target_transform = transforms.Lambda(
                     lambda y, x=labels[0]: y - x
                 ) if scenario=='domain' else None
-                print("target transform", "checked")
                 train_datasets.append(SubDataset(animalpart_train, labels, target_transform=target_transform))
-                print("train dataset", "checked")
                 test_datasets.append(SubDataset(animalpart_test, labels, target_transform=target_transform))
-                print("label", labels, "done")
-            print("THIS IS DONE")
+                    
+               
+    elif name in ['ABLATEDHEAD','ABLATEDTORSO','ABLATEDTAIL']:
+        # check for number of tasks
+        if tasks>8:
+            raise ValueError("Experiment 'ANIMALPART' cannot have more than 8 tasks!")
+        # configurations
+        config = DATASET_CONFIGS['animalpart']
+        classes_per_task = int(np.floor(8 / tasks))
+        ##################### REMOVE #################
+        print("Class per task", classes_per_task)
+        if not only_config:
+            # prepare permutation to shuffle label-ids (to create different class batches for each random seed)
+            permutation = np.array(list(range(8))) if exception else np.random.permutation(list(range(8)))
+            print("Permutation", permutation)
+            target_transform = transforms.Lambda(lambda y, p=permutation: int(p[y]))
+            
+            # prepare original images for test datasets with all classes
+            animalpart_test = get_dataset('animalpart', type="test", ablated=True , dir=data_dir, target_transform=target_transform,
+                                     verbose=verbose)
+            #for Ablated head
+            if name=="ABLATEDHEAD":
+                ablated_train = get_dataset('ablatedhead', type="train", dir=data_dir, target_transform=target_transform,
+                                      verbose=verbose)
+                ablated_test = get_dataset('ablatedhead', type="test", dir=data_dir, target_transform=target_transform,
+                                         verbose=verbose)
+            #for Ablated torso
+            if name=="ABLATEDTORSO":
+                ablated_train = get_dataset('ablatedtorso', type="train", dir=data_dir, target_transform=target_transform,
+                                      verbose=verbose)
+                ablated_test = get_dataset('ablatedtorso', type="test", dir=data_dir, target_transform=target_transform,
+                                         verbose=verbose)
                 
+            #for Ablated tail
+            if name=="ABLATEDTAIL":
+                ablated_train = get_dataset('ablatedtail', type="train", dir=data_dir, target_transform=target_transform,
+                                      verbose=verbose)
+                ablated_test = get_dataset('ablatedtail', type="test", dir=data_dir, target_transform=target_transform,
+                                         verbose=verbose)
+            
+            # generate labels-per-task
+            labels_per_task = [
+                list(np.array(range(classes_per_task)) + classes_per_task * task_id) for task_id in range(tasks)
+            ]
+            ##################### REMOVE #################
+            print("GENERATED LABELS", labels_per_task)
+            
+            # split them up into sub-tasks
+            test_datasets = []
+            ablatedtrain_datasets=[]
+            ablatedtest_datasets=[]
+                
+            for labels in labels_per_task:
+                target_transform = transforms.Lambda(
+                    lambda y, x=labels[0]: y - x
+                ) if scenario=='domain' else None
+                test_datasets.append(SubDataset(animalpart_test, labels, target_transform=target_transform))
+                ablatedtrain_datasets.append(SubDataset(ablated_train, labels, target_transform=target_transform))
+                ablatedtest_datasets.append(SubDataset(ablated_test, labels, target_transform=target_transform))
+                    
+    elif name == 'ALLANIMALPART': ############### RECHECK NOT TOO SURE#########!!!!!
+        # check for number of tasks
+        if tasks>8:
+            raise ValueError("Experiment 'ANIMALPART' cannot have more than 8 tasks!")
+        # configurations
+        config = DATASET_CONFIGS['allanimalpart']
+        classes_per_task = int(np.floor(8 / tasks))
+        ##################### REMOVE #################
+        print("Class per task", classes_per_task)
+        if not only_config:
+            # prepare permutation to shuffle label-ids (to create different class batches for each random seed)
+            permutation = np.array(list(range(8))) if exception else np.random.permutation(list(range(8)))
+            print("Permutation", permutation)
+            target_transform = transforms.Lambda(lambda y, p=permutation: int(p[y]))
+            
+            # prepare train and test datasets with all classes
+            animalpart_test = get_dataset('animalpart', type="test",ablated=True, dir=data_dir, target_transform=target_transform,
+                                     verbose=verbose)
+            
+            ablatedhead_train = get_dataset('ablatedhead', type="train", dir=data_dir, target_transform=target_transform,
+                                      verbose=verbose)
+            ablatedhead_test = get_dataset('ablatedhead', type="test", dir=data_dir, target_transform=target_transform,
+                                         verbose=verbose)
+     
+            ablatedtorso_train = get_dataset('ablatedtorso', type="train", dir=data_dir, target_transform=target_transform,
+                                      verbose=verbose)
+            ablatedtorso_test = get_dataset('ablatedtorso', type="test", dir=data_dir, target_transform=target_transform,
+                                         verbose=verbose)
+                
+            ablatedtail_train = get_dataset('ablatedtail', type="train", dir=data_dir, target_transform=target_transform,
+                                      verbose=verbose)
+            ablatedtail_test = get_dataset('ablatedtail', type="test", dir=data_dir, target_transform=target_transform,
+                                         verbose=verbose)
+            
+            # generate labels-per-task
+            labels_per_task = [
+                list(np.array(range(classes_per_task)) + classes_per_task * task_id) for task_id in range(tasks)
+            ]
+            ##################### REMOVE #################
+            print("GENERATED LABELS", labels_per_task)
+            
+            # split them up into sub-tasks
+            test_datasets = []
+            ablatedtrain_datasets=[]
+            ablatedtest_datasets=[]
+                
+            for labels in labels_per_task:
+                target_transform = transforms.Lambda(
+                    lambda y, x=labels[0]: y - x
+                ) if scenario=='domain' else None
+                test_datasets.append(SubDataset(animalpart_test, labels, target_transform=target_transform))
+                ablatedtrain_datasets.append(SubDataset(ablated_train, labels, target_transform=target_transform))
+                ablatedtest_datasets.append(SubDataset(ablated_test, labels, target_transform=target_transform))            
     else:
         raise RuntimeError('Given undefined experiment: {}'.format(name))
 
@@ -342,4 +480,7 @@ def get_multitask_experiment(name, scenario, tasks, data_dir="./datasets", only_
     config['classes'] = classes_per_task if scenario=='domain' else classes_per_task*tasks
 
     # Return tuple of train-, validation- and test-dataset, config-dictionary and number of classes per task
-    return config if only_config else ((train_datasets, test_datasets), config, classes_per_task)
+    if name in ['ABLATEDHEAD','ABLATEDTORSO','ABLATEDTAIL']:
+        return config if only_config else ((ablatedtrain_datasets,ablatedtest_datasets,test_datasets), config, classes_per_task)
+    else:
+        return config if only_config else ((train_datasets, test_datasets), config, classes_per_task)
