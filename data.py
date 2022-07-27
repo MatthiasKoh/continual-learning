@@ -351,7 +351,7 @@ def get_multitask_experiment(name, scenario, tasks, data_dir="./datasets", only_
             test_datasets = []
                 
             for labels in labels_per_task:
-                print("labels start",label)
+                print("labels start",labels)
                 target_transform = transforms.Lambda(
                     lambda y, x=labels[0]: y - x
                 ) if scenario=='domain' else None
