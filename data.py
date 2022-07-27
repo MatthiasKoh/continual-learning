@@ -53,7 +53,6 @@ def get_dataset(name, type='train',ablated=False, download=True, capacity=None, 
             dataset = test_dataset
         else:
             dataset = train_dataset
-i
     else:   
         dataset = dataset_class('{dir}/{name}'.format(dir=dir, name=data_name), train=False if type=='test' else True,
                             download=download, transform=dataset_transform, target_transform=target_transform)
