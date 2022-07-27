@@ -11,7 +11,7 @@ import evaluate
 
 
 #added Test_datasets for Evaluation                                                                                       #default was iters= 2000
-def train_cl(model, train_datasets,test_datasets, result_list, original_datasets= none, replay_mode="none", scenario="class",classes_per_task=None,iters=200,batch_size=32,
+def train_cl(model, train_datasets,test_datasets, result_list, original_datasets= None, replay_mode="none", scenario="class",classes_per_task=None,iters=200,batch_size=32,
              generator=None, gen_iters=0, gen_loss_cbs=list(), loss_cbs=list(), eval_cbs=list(), sample_cbs=list(),
              use_exemplars=True, add_exemplars=False, metric_cbs=list()):
     '''Train a model (with a "train_a_batch" method) on multiple tasks, with replay-strategy specified by [replay_mode].
