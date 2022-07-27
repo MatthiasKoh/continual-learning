@@ -220,7 +220,7 @@ def run(args, verbose=False):
       (train_datasets, test_datasets), config, classes_per_task = get_multitask_experiment(
         name=args.experiment, scenario=scenario, tasks=args.tasks, data_dir=args.d_dir,
         verbose=verbose, exception=True if args.seed==0 else False,)
-      original_dataset= None
+      original_datasets= None
       
     result_list =[] # NEEED REUPDATE!!!!!!!!!!!!!!!
 
